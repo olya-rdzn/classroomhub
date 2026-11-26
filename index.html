@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>ClassroomHub</title>
 <style>
-:root{--b:#3f2562;--t:#efe9f7;--bg:#f7f4fb;--l:#ddd3ea;--m:#6d6384;--ink:#1e1530}
+:root{--b:#3f2562;--t:#efe9f6;--bg:#f7f5fa;--l:#ddd5e8;--m:#7a6e8c;--ink:#1e1630}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,Segoe UI,sans-serif;-webkit-text-size-adjust:100%}
 header{background:var(--b);color:#fff;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.grow{flex:1}.mute{color:var(--m)}.small,small{font-size:13px}.ok{color:#2f8f5b;font-weight:600;min-height:1.4em}.err{color:#b42318}
+.grow{flex:1}.mute{color:var(--m)}.small,small{font-size:13px}.ok{color:#1f6b33;font-weight:600;min-height:1.4em}.err{color:#b3261e}
 button,input,select,textarea{font:inherit}
 .btn{border:0;background:var(--b);color:#fff;border-radius:12px;padding:12px 18px;font-weight:600;cursor:pointer}
-.btn.sm{padding:6px 12px;font-size:13px;border-radius:9px}.btn.ghost{background:#fff;color:var(--b);border:1px solid var(--l)}.btn.red{background:#fff;color:#b42318;border:1px solid #f0c4c0}
+.btn.sm{padding:6px 12px;font-size:13px;border-radius:9px}.btn.ghost{background:#fff;color:var(--b);border:1px solid var(--l)}.btn.red{background:#fff;color:#b3261e;border:1px solid #f8d7d7}
 header .btn{background:#fff;color:var(--b)}header .btn.ghost{background:none;color:#fff;border-color:#ffffff66}
 input,textarea,select{width:100%;border:1px solid var(--l);border-radius:12px;padding:11px 12px;background:#fff;margin:4px 0;font-size:16px}
 header select{width:auto;margin:0;font-size:14px}textarea{min-height:110px}input[type=checkbox]{width:auto;margin:0 5px 0 0}
@@ -29,7 +29,7 @@ main{padding:18px;max-width:840px}h2{margin:0 0 6px}h3{margin:18px 0 6px;font-si
 .chart{display:flex;gap:10px;overflow-x:auto;padding:4px 0}.col{flex:0 0 70px;text-align:center;font-size:12px}
 .bw{height:120px;display:flex;align-items:flex-end}.bw div{width:100%;background:var(--b);border-radius:6px 6px 0 0}
 details{margin:6px 0}summary{cursor:pointer;color:var(--b);font-weight:600}
-.login{max-width:320px;margin:15vh auto;padding:0 16px}.banner{background:#fff4d6;border:1px solid #f0d58a;border-radius:10px;padding:8px 12px;margin-bottom:10px}
+.login{max-width:320px;margin:15vh auto;padding:0 16px}.banner{background:#fbf0c8;border:1px solid #e8d27a;border-radius:10px;padding:8px 12px;margin-bottom:10px}
 /* student, mobile first */
 .pad{padding:16px 16px calc(100px + env(safe-area-inset-bottom));max-width:560px;margin:auto}
 .bottom{position:fixed;left:0;right:0;bottom:0;display:flex;background:#fff;border-top:1px solid var(--l);padding-bottom:env(safe-area-inset-bottom);z-index:5}
@@ -51,8 +51,8 @@ details{margin:6px 0}summary{cursor:pointer;color:var(--b);font-weight:600}
 const sb=supabase.createClient('https://lxkalpglmelzggkiazfw.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx4a2FscGdsbWVsemdna2lhemZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQzMTE1NzMsImV4cCI6MjEwOTg4NzU3M30.NILzEMAQAO_8j9AE4YQrhuUOqh3ZQ-CiEeeNA7sdEJQ');
 const $=s=>document.querySelector(s),app=$('#app'),act={};
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const T={question:['Question wall','Ask anything about the lesson.'],exit:['Exit ticket','Two quick answers before you leave.'],feedback:['Feedback box','Comments on pace, materials or atmosphere.'],confidence:['Confidence meter','How well do you understand today’s lesson?'],parking:['Parking lot','A tangent or idea to revisit later.']};
-const SH={question:['💬','Ask'],exit:['🎫','Exit'],feedback:['📝','Feedback'],confidence:['📊','Rate'],parking:['🅿️','Parking']};
+const T={question:['Question wall','Ask anything about the lesson.'],exit:['Exit ticket','Two quick answers before you leave.'],feedback:['Feedback box','Comments on pace or materials, or anything to revisit later.'],confidence:['Confidence meter','How well do you understand today’s lesson?']};
+const SH={question:['💬','Ask'],exit:['🎫','Exit'],feedback:['📝','Feedback'],confidence:['📊','Rate']};
 const code=new URLSearchParams(location.search).get('c');
 app.onclick=e=>{const b=e.target.closest('[data-a]');if(b)act[b.dataset.a]?.(b.dataset.v)};
 code?student():instructor();
@@ -72,18 +72,18 @@ async function student(){
   const ts=tools();if(!ts.includes(tool))tool=ts[0];
   if(!tool){app.innerHTML='<header><b>'+esc(s.course)+'</b></header><main class="pad"><p class="mute">No activities are open right now.</p></main>';return}
   const f={exit:'<label>Main thing I learned</label><textarea id="a"></textarea><label>What is still unclear</label><textarea id="b"></textarea>',
-   feedback:'<select id="tp"><option>Pace</option><option>Materials</option><option>Atmosphere</option><option>Other</option></select><textarea id="a" placeholder="Your comment…"></textarea>',
    confidence:'<div class="rate">'+[1,2,3,4,5].map(n=>`<button data-a="rate" data-v="${n}" class="${my==n?'on':''}"><b>${n}</b>${['Lost','Shaky','OK','Good','Got it'][n-1]}</button>`).join('')+'</div>'
   }[tool]||'<textarea id="a" placeholder="Type here…"></textarea>';
   app.innerHTML=`<header><b>${esc(s.course)}</b><span class="grow"></span><small>${esc(s.lesson)}</small></header>
   <main class="pad"><h2>${T[tool][0]}</h2><p class="mute">${T[tool][1]}</p>
   ${s.accepting?(tool==='confidence'?f+'<p class="small mute">Tap another number to change your rating.</p>':`${f}<button class="btn send" data-a="send">Send anonymously</button>`):'<p class="mute">Submissions are closed.</p>'}
-  <p class="ok">${msg}</p>
+  <p class="${msg.startsWith('Sent')?'ok':'err'}">${msg}</p>
   ${tool==='question'&&s.share?'<h3>Questions from the class — tap ▲ to upvote</h3><div id="wall"></div>':''}
   <p class="small mute">Anonymous: no name or account needed.</p></main>
   <div class="bottom">${ts.map(t=>`<button data-a="tab" data-v="${t}" class="${t===tool?'on':''}"><span>${SH[t][0]}</span>${SH[t][1]}</button>`).join('')}</div>`;
   loadWall()};
- const sub=async o=>{const {error}=await sb.rpc('hub_submit',{p_session:s.id,p_tool:tool,p_body:o.a||null,p_body2:o.b||null,p_topic:o.tp||null,p_rating:o.r||null,p_client:cid});msg=error?'Could not send. Submissions may be closed.':'Sent ✓';draw()};
+ const sub=async o=>{const {error}=await sb.rpc('hub_submit',{p_session:s.id,p_tool:tool,p_body:o.a||null,p_body2:o.b||null,p_topic:o.tp||null,p_rating:o.r||null,p_client:cid});const E={too_fast:'Please wait a few seconds before sending again.',tool_limit:'You have reached the limit for this activity.',rate_limit:'Many people are sending right now. Try again in a moment.',session_full:'This session has reached its limit.',empty:'Please write something first.'};
+  msg=error?(E[Object.keys(E).find(k=>(error.message||'').includes(k))]||'Could not send. Submissions may be closed.'):'Sent ✓';draw()};
  act.tab=async v=>{tool=v;msg='';s=(await get())||s;draw()};
  act.rate=v=>{my=+v;sub({r:+v})};
  act.send=()=>{const g=i=>($('#'+i)?.value||'').trim(),a=g('a'),b=g('b');if(a||b)sub({a,b,tp:g('tp')})};
