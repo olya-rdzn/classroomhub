@@ -2,7 +2,7 @@
 
 My little classroom response app. Students join from one permanent link per course. 
 
-No names, no account, no sign-up, 100% anonymous.
+No names, no account, no sign-up, **100% anonymous**.
 
 ## Student's side
 
